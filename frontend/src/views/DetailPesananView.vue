@@ -46,6 +46,14 @@ function terubah(p) {
       >
         <Ikon nama="ulang" />Perbarui status
       </button>
+<button
+  type="button"
+  class="button-danger-outline"
+  :disabled="sibuk"
+  @click="handleBatal"
+>
+  Batalkan Pesanan
+</button>
     </div>
     <StatusBaca :sibuk="sibuk" :error="error" @ulang="muat" />
     <article v-if="data" class="order-detail">
@@ -55,9 +63,9 @@ function terubah(p) {
             <span class="icon-tile"><Ikon nama="tas" /></span>
             <h2>Pesanan {{ data.data.id }}</h2>
           </div>
-          <span class="status-badge" :class="`status-${data.data.status}`">{{
-            labelPesanan(data.data)
-          }}</span>
+          <span class="status-badge" :class="`status-${data.data.status}`">
+          {{ labelPesanan(data.data.status)}}
+        </span>
         </div>
         <dl class="order-identities">
           <div>
@@ -104,23 +112,24 @@ function terubah(p) {
             <div>
               <strong>{{ item.nama }}</strong
               ><span
-                >{{ item.kuantitas }} {{ item.satuan }} ×
-                {{ formatRupiah(item.hargaSatuan) }}</span
-              >
+                >
+                {{ item.kuantitas }} {{ item.satuan }} ×
+                {{ formatRupiah(item.hargaSatuan) }}
+                </span>
             </div>
             <strong>{{ formatRupiah(item.subtotal) }}</strong>
           </li>
         </ul>
         <div v-if="data.data.alasanPembatalan" class="notice notice-error">
           <div>
-            <strong>{{ labelPesanan(data.data) }}</strong>
+            <strong>{{ labelPesanan(data.data.status) }}</strong>
             <p>{{ data.data.alasanPembatalan }}</p>
           </div>
         </div>
         <AksiPesanan
           :key="data.data.id"
           :pesanan="data.data"
-          @terubah="terubah"
+          @terubah="muat"
           @perbarui="muat"
         />
       </div>

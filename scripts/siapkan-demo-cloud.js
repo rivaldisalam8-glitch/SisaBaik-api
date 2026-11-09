@@ -23,6 +23,16 @@ try {
     new URL("../database/11_schema_cloud.sql", import.meta.url),
     "utf8",
   );
+
+const auth = (
+  await readFile(
+    new URL("../database/07_auth.sql", import.meta.url),
+    "utf8",
+  )
+)
+  .replace(/^\s*BEGIN;/, "")
+  .replace(/COMMIT;\s*$/, "");
+
   const migrasi = (
     await readFile(
       new URL("../database/12_alur_transaksi.sql", import.meta.url),
@@ -50,7 +60,8 @@ try {
       );
     }
     await client.query(schema);
-    await client.query(migrasi);
+await client.query(auth);
+await client.query(migrasi);
     const akun = [
       ["Rina Putri", "rina.penyedia@example.test", "penyedia"],
       ["Budi Santoso", "budi.penyedia@example.test", "penyedia"],

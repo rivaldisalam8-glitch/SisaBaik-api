@@ -3,7 +3,7 @@ import { ref } from 'vue';
 export function useBaca(panggilApi) {
   const data = ref(null);
   const sibuk = ref(false);
-  const error = ref(null);
+  const error = ref(""); // Diubah dari null menjadi string kosong
 
   let controller = null;
 
@@ -18,7 +18,7 @@ export function useBaca(panggilApi) {
     batalkan();
     controller = new AbortController();
     sibuk.value = true;
-    error.value = null;
+    error.value = ""; // Diubah dari null menjadi string kosong
 
     try {
       const hasil = await panggilApi(controller.signal);
@@ -37,6 +37,6 @@ export function useBaca(panggilApi) {
     sibuk,
     error,
     muat,
-    batalkan, // <-- Pastikan batalkan diekspor di sini agar tidak ReferenceError
+    batalkan,
   };
 }

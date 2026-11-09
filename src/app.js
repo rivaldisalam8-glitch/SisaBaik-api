@@ -52,8 +52,8 @@ const jsonBiasa = express.json({ limit: "20kb" });
 const jsonFoto = express.json({ limit: "3mb" });
 app.use((req, res, next) => {
  const penawaran = /^\/api\/penawaran(?:\/[1-9][0-9]*)?\/?$/.test(req.path) &&
- ["POST", "PUT"].includes(req.method);
- return (penawaran ? jsonFoto : jsonBiasa)(req, res, next);
+["POST", "PUT"].includes(req.method);
+return (penawaran ? jsonFoto : jsonBiasa)(req, res, next);
 });
 app.get("/healthz", (req, res) => {
  res.set("Cache-Control", "no-store");

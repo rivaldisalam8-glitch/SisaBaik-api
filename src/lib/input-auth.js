@@ -67,23 +67,26 @@ export function loginValid(body) {
  };
 }
 export function penawaranSesiValid(body, pengguna) {
- objekValid(body, [
- "nama",
- "kategori",
- "hargaNormal",
- "hargaPenawaran",
- "stok",
- "satuan",
- "status",
- "berakhirPada",
- ]);
- return penawaranValid({ ...body, penyediaId: pengguna.penyediaId });
+  objekValid(body, [
+    "nama",
+    "kategori",
+    "hargaNormal",
+    "hargaPenawaran",
+    "stok",
+    "satuan",
+    "status",
+    "berakhirPada",
+    "foto",
+    "versi",
+  ]);
+  return penawaranValid({ ...body, penyediaId: pengguna.penyediaId });
 }
+
 export function pesananSesiValid(body, pengguna) {
- objekValid(body, ["items"]);
- const data = pesananValid({
- emailPembeli: pengguna.email,
- items: body.items,
- });
- return { pembeliId: pengguna.id, items: data.items };
+  objekValid(body, ["items"]);
+  const data = pesananValid({
+    emailPembeli: pengguna.email,
+    items: body.items,
+  });
+  return { pembeliId: pengguna.id, items: data.items };
 }

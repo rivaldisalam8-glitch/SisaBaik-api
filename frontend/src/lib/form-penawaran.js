@@ -62,5 +62,7 @@ export function validasiForm(form, waktuSekarang = Date.now()) {
  } else {
  data.berakhirPada = waktu.toISOString();
  }
- return { errors, data: Object.keys(errors).length ? null : data };
+ return {
+    errors, data: Object.keys(errors).length ? null : data
+};
 }

@@ -32,6 +32,19 @@ export async function detail(req, res) {
  true,
  );
  return res.json({ success: true, data: hasil }); }
+
+export async function foto(req, res) {
+  const hasil = await data.bacaFotoPenawaran(
+    idValid(req.params.id),
+  );
+
+  res.set("Content-Type", hasil.foto_tipe || "image/webp");
+  res.set("Content-Length", String(hasil.foto.length));
+  res.set("X-Content-Type-Options", "nosniff");
+
+  return res.status(200).send(hasil.foto);
+}
+
 export async function buat(req, res) {
  const hasil = await data.simpanPenawaran(
  penawaranSesiValid(req.body, req.pengguna),

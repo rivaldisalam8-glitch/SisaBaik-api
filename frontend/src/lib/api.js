@@ -16,19 +16,21 @@ export async function api(path, opsi = {}) {
  throw new ApiError(401, "AUTH_REQUIRED", "Silakan login lagi.");
  }
  }
- const headers = { Accept: "application/json" };
- if (body !== undefined)
- headers["Content-Type"] = "application/json";
- if (auth) headers.Authorization = `Bearer ${token}`;
- let response;
- let hasil; try {
- response = await fetch(path, {
- method,
- headers,
- signal,
- cache: "no-store",
- body: body === undefined ? undefined : JSON.stringify(body),
- });
+const headers = { Accept: "application/json" };
+if (body !== undefined)
+  headers["Content-Type"] = "application/json";
+if (auth) headers["Authorization"] = `Bearer ${token}`;
+
+let response;
+let hasil;
+try {
+  response = await fetch(path, {
+    method,
+    headers,
+    signal,
+    cache: "no-store",
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
  if (response.status !== 204) {
  const jenis = response.headers.get("content-type") ?? "";
  if (!jenis.includes("application/json")) {

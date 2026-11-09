@@ -27,6 +27,15 @@ try {
     new URL("../database/11_schema_cloud.sql", import.meta.url),
     "utf8",
   );
+const auth = (
+  await readFile(
+    new URL("../database/07_auth.sql", import.meta.url),
+    "utf8",
+  )
+)
+  .replace(/^\s*BEGIN;/, "")
+  .replace(/COMMIT;\s*$/, "");
+
   const migration = (
     await readFile(
       new URL("../database/12_alur_transaksi.sql", import.meta.url),
@@ -51,7 +60,8 @@ try {
       );
     await c.query("SET LOCAL search_path=public");
     await c.query(schema);
-    await c.query(migration);
+await c.query(auth);
+await c.query(migration);
   });
   console.log(
     "Schema aplikasi siap tanpa akun contoh. Buat akun melalui halaman Daftar.",

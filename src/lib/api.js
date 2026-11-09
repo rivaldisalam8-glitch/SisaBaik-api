@@ -56,7 +56,7 @@ export function halamanValid(query) {
  const page = baca("page", 1, 10000);
  const limit = baca("limit", 10, 50);
  return { page, limit, offset: (page - 1) * limit };
-} 
+}
 export function metaHalaman(jumlah, paging) {
  return {
  jumlah,
@@ -82,32 +82,74 @@ export function filterValid(query) {
  return { q, kategori, status, tersedia: tersedia === "true" };
 }
 export function penawaranValid(body) {
- objekValid(body, [
- "penyediaId",
- "nama",
- "kategori",
- "hargaNormal",
- "hargaPenawaran",
- "stok",
- "satuan",
- "status",
- "berakhirPada",
- ]);
- const hasil = {
- penyediaId: idValid(body.penyediaId, "penyediaId"),
- nama: teksValid(body.nama, "nama", 3, 120),
- kategori: teksValid(body.kategori, "kategori", 1, 40),
- hargaNormal: angkaValid(body.hargaNormal, "hargaNormal", 1, 999999999999),
- hargaPenawaran: angkaValid(
- body.hargaPenawaran,
- "hargaPenawaran",
- 0,
- 999999999999,
- ),
- stok: angkaValid(body.stok, "stok", 0, 2147483647),
- satuan: teksValid(body.satuan, "satuan", 1, 20),
- status: teksValid(body.status, "status", 1, 20),
- };
+  objekValid(body, [
+    "penyediaId",
+    "nama",
+    "kategori",
+    "hargaNormal",
+    "hargaPenawaran",
+    "stok",
+    "satuan",
+    "status",
+    "berakhirPada",
+    "foto",   // <-- Tambahkan ini
+    "versi",  // <-- Tambahkan ini
+  ]);
+
+    let foto;
+  if (Object.hasOwn(body, "foto")) {
+    if (body.foto !== null && typeof body.foto !== "string") {
+      salah("foto harus berupa data URL atau null.");
+    }
+
+    if (typeof body.foto === "string" && body.foto.length > 3 * 1024 * 1024) {
+      salah("Ukuran data foto terlalu besar.");
+    }
+
+    foto = body.foto;
+  }
+
+  let versi;
+  if (Object.hasOwn(body, "versi")) {
+    const nilaiVersi = body.versi;
+
+    if (
+      !(
+        (typeof nilaiVersi === "string" &&
+          /^(0|[1-9][0-9]*)$/.test(nilaiVersi)) ||
+        (typeof nilaiVersi === "number" &&
+          Number.isSafeInteger(nilaiVersi) &&
+          nilaiVersi >= 0)
+      )
+    ) {
+      salah("versi harus berupa integer nonnegatif.");
+    }
+
+    versi = String(nilaiVersi);
+
+    if (BigInt(versi) > 9223372036854775807n) {
+      salah("versi melampaui batas integer database.");
+    }
+  }
+
+  const hasil = {
+    penyediaId: idValid(body.penyediaId, "penyediaId"),
+    nama: teksValid(body.nama, "nama", 3, 120),
+    kategori: teksValid(body.kategori, "kategori", 1, 40),
+    hargaNormal: angkaValid(body.hargaNormal, "hargaNormal", 1, 9999999999),
+    hargaPenawaran: angkaValid(
+      body.hargaPenawaran,
+      "hargaPenawaran",
+      0,
+      9999999999,
+    ),
+    stok: angkaValid(body.stok, "stok", 0, 2147483647),
+    satuan: teksValid(body.satuan, "satuan", 1, 20),
+    status: teksValid(body.status, "status", 1, 20),
+    ...(Object.hasOwn(body, "foto") ? { foto } : {}),
+    ...(Object.hasOwn(body, "versi") ? { versi } : {}),
+  };
+
  if (hasil.hargaPenawaran > hasil.hargaNormal) {
  salah("hargaPenawaran tidak boleh melebihi hargaNormal.");
  }

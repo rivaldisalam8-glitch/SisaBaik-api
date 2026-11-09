@@ -96,50 +96,40 @@ async function kirim(aksi) {
     </h3>
     <p v-if="pesan" class="notice notice-success" role="status">{{ pesan }}</p>
     <p v-if="error" class="notice notice-error" role="alert">{{ error }}</p>
-    <div class="button-group" v-if="props.pesanan.bolehAksi?.length">
-      <button
-        v-if="props.pesanan.bolehAksi.includes('konfirmasi')"
-        type="button"
-        :disabled="sibuk || sesi.keluar"
-        @click="kirim('konfirmasi')"
-      >
-        <Ikon nama="cek" />Terima pesanan
-      </button>
-      <button
-        v-if="props.pesanan.bolehAksi.includes('siap')"
-        type="button"
-        :disabled="sibuk || sesi.keluar"
-        @click="kirim('siap')"
-      >
-        Tandai siap diambil
-      </button>
-      <button
-        v-if="props.pesanan.bolehAksi.includes('selesai')"
-        type="button"
-        :disabled="sibuk || sesi.keluar"
-        @click="buka('selesai')"
-      >
-        Catat pengambilan &amp; pembayaran
-      </button>
-      <button
-        v-if="props.pesanan.bolehAksi.includes('tolak')"
-        type="button"
-        class="button-danger-outline"
-        :disabled="sibuk || sesi.keluar"
-        @click="buka('tolak')"
-      >
-        Tolak pesanan
-      </button>
-      <button
-        v-if="props.pesanan.bolehAksi.includes('batal')"
-        type="button"
-        class="button-danger-outline"
-        :disabled="sibuk || sesi.keluar"
-        @click="buka('batal')"
-      >
-        Batalkan pesanan
-      </button>
-    </div>
+    <!-- Contoh pelonggaran v-if dengan tetap mempertahankan struktur v-if -->
+<div class="button-group" v-if="props.pesanan">
+
+  <!-- Tombol Terima Pesanan -->
+  <button
+    v-if="!props.pesanan.bolehAksi || props.pesanan.bolehAksi.includes('konfirmasi')"
+    type="button"
+    :disabled="sibuk || sesi.keluar"
+    @click="kirim('konfirmasi')"
+  >
+    <Ikon nama="cek" />Terima pesanan
+  </button>
+
+  <!-- Tombol Tandai Siap Diambil -->
+  <button
+    v-if="!props.pesanan.bolehAksi || props.pesanan.bolehAksi.includes('siap')"
+    type="button"
+    :disabled="sibuk || sesi.keluar"
+    @click="kirim('siap')"
+  >
+    Tandai siap diambil
+  </button>
+
+  <!-- Tombol Catat Pengambilan & Pembayaran -->
+  <button
+    v-if="!props.pesanan.bolehAksi || props.pesanan.bolehAksi.includes('selesai')"
+    type="button"
+    :disabled="sibuk || sesi.keluar"
+    @click="buka('selesai')"
+  >
+    Catat pengambilan & pembayaran
+  </button>
+
+</div>
     <p class="muted" v-else>
       {{
         props.pesanan.status === "selesai"

@@ -41,7 +41,10 @@ export function tanganiError(error, req, res, next) {
  code = "DATABASE_UNAVAILABLE";
  message = "Database belum tersedia.";
  }
- if (status >= 500) console.error("Server error:", error.code ?? error.name);
+ if (status >= 500) {
+  console.error("Server error:", error.code ?? error.name, error.message);
+  console.error(error.stack);
+}
  return res
  .status(status)
  .json({ success: false, error: { code, message } });

@@ -13,13 +13,13 @@ const props = defineProps({
 const emit = defineEmits(["pilih", "ubah"]);
 const fotoGagal = ref(false);
 watch(
- () => props.penawaran.fotoUrl,
+ () => props.penawaran.foto,
  () => {
  fotoGagal.value = false;
  },
 );
 const memakaiFoto = computed(
- () => Boolean(props.penawaran.fotoUrl) && !fotoGagal.value,
+ () => Boolean(props.penawaran.foto) && !fotoGagal.value,
 );
 const hemat = computed(
  () => props.penawaran.hargaNormal - props.penawaran.hargaPenawaran,
@@ -39,16 +39,15 @@ const visual = computed(() => visualKategori(props.penawaran.kategori));
  class="offer-visual"
  :class="[`visual-${visual.nada}`, { 'food-photo': memakaiFoto }]"
  >
- <img
- :src="memakaiFoto ? props.penawaran.fotoUrl : visual.gambar"
+ <img :src="memakaiFoto ? props.penawaran.foto : visual.gambar"
  :alt="memakaiFoto ? 'Foto ' + props.penawaran.nama : ''"
  @error="fotoGagal = true"
  width="640"
  height="420"
  loading="lazy"
  decoding="async"
- /><span class="offer-badge" v-if="props.penawaran.hargaPenawaran ===
-0"
+ />
+ <span class="offer-badge" v-if="props.penawaran.hargaPenawaran === 0"
  >Gratis</span
  ><span class="offer-badge" v-else-if="diskon > 0"
  >Hemat {{ diskon }}%</span
